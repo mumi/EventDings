@@ -17,7 +17,7 @@
 		<java.version>19</java.version>
 		<protobuf.version>3.21.12</protobuf.version>
 		<protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-		<grpc.version>1.51.1</grpc.version>
+		<grpc.version>1.51.0</grpc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -95,6 +95,7 @@
 		<dependency>
 			<groupId>io.av360</groupId>
 			<artifactId>eventdings-dispatcher</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
