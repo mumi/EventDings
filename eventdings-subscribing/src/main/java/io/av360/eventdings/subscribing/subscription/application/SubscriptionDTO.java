@@ -1,4 +1,4 @@
-package io.av360.EventDings.Subscribing.subscription.application;
+package io.av360.eventdings.subscribing.subscription.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,5 +16,5 @@ public class SubscriptionDTO {
     private UUID id;
     private Date createdAt;
     private String subscriberUri;
-    private Map<String, String> filter;
+    private Map<String, String> filters;
 }

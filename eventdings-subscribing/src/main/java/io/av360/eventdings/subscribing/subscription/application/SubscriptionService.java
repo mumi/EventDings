@@ -1,7 +1,8 @@
-package io.av360.EventDings.Subscribing.subscription.application;
+package io.av360.eventdings.subscribing.subscription.application;
 
-import io.av360.EventDings.Subscribing.subscription.domain.Subscription;
-import io.av360.EventDings.Subscribing.subscription.domain.SubscriptionRepository;
+import io.av360.eventdings.subscribing.GrpcClientService;
+import io.av360.eventdings.subscribing.subscription.domain.Subscription;
+import io.av360.eventdings.subscribing.subscription.domain.SubscriptionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subRepo;
 
+    @Autowired
+    private GrpcClientService grpcClientService;
+
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {
         ModelMapper modelMapper = new ModelMapper();
         Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
@@ -23,6 +27,8 @@ public class SubscriptionService {
         subscription.setCreatedAt(new Date());
 
         subRepo.save(subscription);
+
+        grpcClientService.sendSubscription(subscriptionDTO);
 
         SubscriptionDTO returnDTO = modelMapper.map(subscription, SubscriptionDTO.class);
         return returnDTO;
@@ -48,6 +54,7 @@ public class SubscriptionService {
 
     public void deleteSubscription(UUID id) {
         subRepo.deleteById(id);
+        grpcClientService.deleteSubscription(id);
     }
 
 }

@@ -1,4 +1,4 @@
-package io.av360.EventDings.Subscribing.subscription.domain;
+package io.av360.eventdings.subscribing.subscription.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

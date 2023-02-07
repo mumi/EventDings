@@ -1,4 +1,4 @@
-package io.av360.EventDings.Subscribing.subscription.application;
+package io.av360.eventdings.subscribing.subscription.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

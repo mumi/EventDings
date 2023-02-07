@@ -1,4 +1,4 @@
-package io.av360.EventDings.Subscribing;
+package io.av360.eventdings.subscribing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
