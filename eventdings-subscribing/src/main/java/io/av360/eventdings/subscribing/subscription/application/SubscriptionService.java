@@ -20,6 +20,13 @@ public class SubscriptionService {
     @Autowired
     private GrpcClientService grpcClientService;
 
+    public Object getGrpc() {
+        ArrayList<SubscriptionDTO> subscriptionDTOs = getAllSubscriptions();
+
+        grpcClientService.sendSubscriptions(subscriptionDTOs);
+        return null;
+    }
+
     public SubscriptionDTO createSubscription(SubscriptionDTO subscriptionDTO) {
         ModelMapper modelMapper = new ModelMapper();
         Subscription subscription = modelMapper.map(subscriptionDTO, Subscription.class);
@@ -28,9 +35,10 @@ public class SubscriptionService {
 
         subRepo.save(subscription);
 
-        grpcClientService.sendSubscription(subscriptionDTO);
-
         SubscriptionDTO returnDTO = modelMapper.map(subscription, SubscriptionDTO.class);
+
+        grpcClientService.sendSubscription(returnDTO);
+
         return returnDTO;
     }
 
@@ -56,5 +64,6 @@ public class SubscriptionService {
         subRepo.deleteById(id);
         grpcClientService.deleteSubscription(id);
     }
+
 
 }

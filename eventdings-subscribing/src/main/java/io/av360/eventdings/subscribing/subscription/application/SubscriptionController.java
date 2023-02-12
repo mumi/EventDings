@@ -18,6 +18,15 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
+    @GetMapping("/grpc")
+    public ResponseEntity getGrpc() {
+        subscriptionService.getGrpc();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
     @PostMapping("/subscriptions")
     public ResponseEntity createSubscription(@RequestBody SubscriptionDTO subscriptionDTO) {
         SubscriptionDTO processedDTO = subscriptionService.createSubscription(subscriptionDTO);

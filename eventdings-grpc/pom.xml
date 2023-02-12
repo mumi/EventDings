@@ -11,7 +11,7 @@
         <java.version>19</java.version>
         <protobuf.version>3.21.12</protobuf.version>
         <protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-        <grpc.version>1.51.0</grpc.version>
+        <grpc.version>1.53.0</grpc.version>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
     </properties>
