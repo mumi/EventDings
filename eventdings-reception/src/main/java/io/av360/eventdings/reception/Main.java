@@ -12,6 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, URISyntaxException, KeyManagementException, TimeoutException {
         Logger log = LoggerFactory.getLogger(Main.class);
 
+
+
         log.info("Starting application");
 
         log.info("Initializing RabbitMQ connection");

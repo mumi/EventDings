@@ -1,41 +1,50 @@
 package io.av360.eventdings.reception;
 
-public class Config {
-    String AMQP_URI;
-    String AMQP_EXCHANGE;
-    String AMQP_QUEUE;
-    String AMQP_ROUTING_KEY;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
-    private Config() {
-
-        AMQP_URI = System.getenv("RABBITMQ_URL");
-        AMQP_EXCHANGE = System.getenv("RABBITMQ_EXCHANGE");
-        AMQP_QUEUE = System.getenv("RABBITMQ_QUEUE");
-        AMQP_ROUTING_KEY = System.getenv("RABBITMQ_ROUTING_KEY");
-
-        if (AMQP_URI == null || AMQP_URI.isEmpty()) {
-            throw new IllegalArgumentException("RABBITMQ_URL is not set");
-        }
-
-        if (AMQP_EXCHANGE == null || AMQP_EXCHANGE.isEmpty()) {
-            throw new IllegalArgumentException("RABBITMQ_EXCHANGE is not set");
-        }
-
-        if (AMQP_QUEUE == null || AMQP_QUEUE.isEmpty()) {
-            throw new IllegalArgumentException("RABBITMQ_QUEUE is not set");
-        }
-
-        if (AMQP_ROUTING_KEY == null || AMQP_ROUTING_KEY.isEmpty()) {
-            throw new IllegalArgumentException("RABBITMQ_ROUTING_KEY is not set");
-        }
-    }
+public record Config(String host, String stream, String user, String password, String virtualHost, int port) {
 
     private static Config instance;
 
     public static Config getInstance() {
         if (instance == null) {
-            instance = new Config();
+            String host = System.getenv("RABBITMQ_URL");
+            String stream = System.getenv("RABBITMQ_STREAM");
+            String user = System.getenv("RABBITMQ_USER");
+            String password = System.getenv("RABBITMQ_PASSWORD");
+            String virtualHost = System.getenv("RABBITMQ_VHOST");
+            String port = System.getenv("RABBITMQ_PORT");
+
+            if (host == null || host.isEmpty()) {
+                throw new IllegalArgumentException("RABBITMQ_URL is not set");
+            }
+
+            if (stream == null || stream.isEmpty()) {
+                throw new IllegalArgumentException("RABBITMQ_STREAM is not set");
+            }
+
+            if (user == null || user.isEmpty()) {
+                throw new IllegalArgumentException("RABBITMQ_USER is not set");
+            }
+
+            if (password == null || password.isEmpty()) {
+                throw new IllegalArgumentException("RABBITMQ_PASSWORD is not set");
+            }
+
+            if (virtualHost == null || virtualHost.isEmpty()) {
+                virtualHost = "/";
+            }
+
+            if (port == null || port.isEmpty()) {
+                port = "5552";
+            }
+
+            instance = new Config(host, stream, user, password, virtualHost, Integer.parseInt(port));
         }
         return instance;
     }
+
+
 }
+
