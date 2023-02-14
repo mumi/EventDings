@@ -1,4 +1,4 @@
-package io.av360.eventdings.dispatcher;
+package io.av360.eventdings.dispatcher.grpc;
 
 import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 import org.springframework.context.annotation.Configuration;

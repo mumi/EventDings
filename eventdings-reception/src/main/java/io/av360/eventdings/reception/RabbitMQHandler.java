@@ -45,12 +45,12 @@ public class RabbitMQHandler {
                 .virtualHost(cfg.virtualHost())
                 .build();
 
-        environment.streamCreator()
-                .maxAge(Duration.ofDays(1))
-                .maxLengthBytes(ByteCapacity.GB(10))
-                .maxSegmentSizeBytes(ByteCapacity.MB(50))
-                .stream(cfg.stream())
-                .create();
+//        environment.streamCreator()
+//                .maxAge(Duration.ofDays(1))
+//                .maxLengthBytes(ByteCapacity.GB(10))
+//                .maxSegmentSizeBytes(ByteCapacity.MB(50))
+//                .stream(cfg.stream())
+//                .create();
 
         this.producer = this.environment.producerBuilder().stream(Config.getInstance().stream()).build();
     }

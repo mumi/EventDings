@@ -1,4 +1,4 @@
-package io.av360.eventdings.dispatcher;
+package io.av360.eventdings.dispatcher.grpc;
 
 import io.grpc.Metadata;
 import io.grpc.ServerCall;

@@ -1,8 +1,8 @@
-package io.av360.eventdings.subscribing;
+package io.av360.eventdings.subscribing.grpc;
 
 import com.google.protobuf.Timestamp;
-import io.av360.eventdings.grpc.*;
-import io.av360.eventdings.subscribing.subscription.application.SubscriptionDTO;
+import io.av360.eventdings.lib.grpc.*;
+import io.av360.eventdings.lib.dtos.SubscriptionDTO;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.client.inject.GrpcClient;

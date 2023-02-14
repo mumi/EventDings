@@ -1,5 +1,6 @@
 package io.av360.eventdings.subscribing.subscription.application;
 
+import io.av360.eventdings.lib.dtos.SubscriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/subscriptions/{id}")
-    public ResponseEntity deleteSubscription(@RequestBody UUID id) {
+    public ResponseEntity deleteSubscription(@PathVariable UUID id) {
         subscriptionService.deleteSubscription(id);
         return ResponseEntity
                 .status(HttpStatus.OK)

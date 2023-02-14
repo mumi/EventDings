@@ -1,4 +1,4 @@
-package io.av360.eventdings.subscribing;
+package io.av360.eventdings.subscribing.grpc;
 
 import io.grpc.*;
 import org.slf4j.Logger;

@@ -1,7 +1,8 @@
-package io.av360.eventdings.subscribing.subscription.application;
+package io.av360.eventdings.lib.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Data
 public class SubscriptionDTO {
 

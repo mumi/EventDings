@@ -8,9 +8,9 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
-public class Main {
+public class EventdingsReceptionApplication {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, URISyntaxException, KeyManagementException, TimeoutException {
-        Logger log = LoggerFactory.getLogger(Main.class);
+        Logger log = LoggerFactory.getLogger(EventdingsReceptionApplication.class);
 
 
 

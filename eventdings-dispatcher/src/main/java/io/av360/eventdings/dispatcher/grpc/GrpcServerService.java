@@ -1,6 +1,7 @@
-package io.av360.eventdings.dispatcher;
+package io.av360.eventdings.dispatcher.grpc;
 
-import io.av360.eventdings.grpc.*;
+import io.av360.eventdings.dispatcher.SubscriptionManager;
+import io.av360.eventdings.lib.grpc.*;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 

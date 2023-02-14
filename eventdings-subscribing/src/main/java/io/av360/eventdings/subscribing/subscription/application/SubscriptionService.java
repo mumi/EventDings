@@ -1,6 +1,7 @@
 package io.av360.eventdings.subscribing.subscription.application;
 
-import io.av360.eventdings.subscribing.GrpcClientService;
+import io.av360.eventdings.lib.dtos.SubscriptionDTO;
+import io.av360.eventdings.subscribing.grpc.GrpcClientService;
 import io.av360.eventdings.subscribing.subscription.domain.Subscription;
 import io.av360.eventdings.subscribing.subscription.domain.SubscriptionRepository;
 import org.modelmapper.ModelMapper;

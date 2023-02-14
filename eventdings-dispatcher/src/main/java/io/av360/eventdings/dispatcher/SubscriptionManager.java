@@ -1,12 +1,13 @@
 package io.av360.eventdings.dispatcher;
 
-import io.av360.eventdings.grpc.Subscription;
-import io.av360.eventdings.grpc.SubscriptionId;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.av360.eventdings.lib.grpc.Subscription;
+import io.av360.eventdings.lib.grpc.SubscriptionId;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.av360.eventdings.lib.dtos.SubscriptionDTO;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public final class SubscriptionManager {
@@ -43,5 +44,31 @@ public final class SubscriptionManager {
         subscriptionDTOs.removeIf(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscriptionId.getId())));
 
         return subscriptionId;
+    }
+
+    public List<SubscriptionDTO> findSubscriptions(String cloudevent) throws JsonProcessingException {
+        List<SubscriptionDTO> matchingSubscriptions = new ArrayList<SubscriptionDTO>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(cloudevent);
+
+        for (SubscriptionDTO subscriptionDTO : subscriptionDTOs) {
+            boolean allFiltersFound = true;
+            for (Map.Entry<String, String> entry : subscriptionDTO.getFilters().entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                if (!jsonNode.has(key) || !jsonNode.get(key).asText().equals(value)) {
+                    allFiltersFound = false;
+                    break;
+                }
+            }
+
+            if (allFiltersFound) {
+                matchingSubscriptions.add(subscriptionDTO);
+            }
+        }
+
+        return matchingSubscriptions;
     }
 }

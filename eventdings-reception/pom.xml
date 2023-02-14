@@ -53,5 +53,10 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.6</version>
         </dependency>
+        <dependency>
+            <groupId>io.av360</groupId>
+            <artifactId>eventdings-lib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
