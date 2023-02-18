@@ -9,15 +9,15 @@ public record Config(String host, String stream, String user, String password, S
 
     public static Config getInstance() {
         if (instance == null) {
-            String host = System.getenv("RABBITMQ_URL");
+            String host = System.getenv("RABBITMQ_HOST");
             String stream = System.getenv("RABBITMQ_STREAM");
             String user = System.getenv("RABBITMQ_USER");
             String password = System.getenv("RABBITMQ_PASSWORD");
             String virtualHost = System.getenv("RABBITMQ_VHOST");
-            String port = System.getenv("RABBITMQ_PORT");
+            String port = System.getenv("RABBITMQ_STREAM_PORT");
 
             if (host == null || host.isEmpty()) {
-                throw new IllegalArgumentException("RABBITMQ_URL is not set");
+                throw new IllegalArgumentException("RABBITMQ_HOST is not set");
             }
 
             if (stream == null || stream.isEmpty()) {
