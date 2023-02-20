@@ -13,9 +13,14 @@ import java.util.UUID;
 public class Delivery {
     private static final Logger log = LoggerFactory.getLogger(Delivery.class);
 
-    HttpClient client = HttpClient.newHttpClient();
-    public boolean deliver(UUID subscriptionId, String cloudevent) {
+    static HttpClient client = HttpClient.newHttpClient();
+    public static boolean deliver(UUID subscriptionId, String cloudevent) {
         String url = SubscriptionManager.getInstance().getSubscriberUrl(subscriptionId);
+
+        if (url == null) {
+            log.error("No subscriber url for subscription" + subscriptionId);
+            return false;
+        }
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))

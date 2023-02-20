@@ -7,39 +7,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.concurrent.TimeoutException;
 
 
 @SpringBootApplication
 public class EventdingsDispatcherApplication {
-    private static final Logger log = LoggerFactory.getLogger(EventdingsDispatcherApplication.class);
-    private static Config cfg = Config.getInstance();
+    public static void main(String[] args) throws IOException, TimeoutException {
+        Logger log = LoggerFactory.getLogger(EventdingsDispatcherApplication.class);
 
-    public static void main(String[] args) {
         SpringApplication.run(EventdingsDispatcherApplication.class, args);
 
+        log.info("Starting Grpc Subscription Refresh Task");
+        Timer timer = new Timer();
+        timer.schedule(new RefreshGrpcSubscriptionsTask(), 0, 5 * 60 * 1000);
 
-        //TODO: This is a hack to wait for the gRPC server to start
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        //TODO: Refactoren & Auslagern
-        try {
-            var client = HttpClient.newHttpClient();
-            var request = HttpRequest.newBuilder(URI.create(cfg.subscribingUrl() + "/grpc")).build();
-            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            log.error("Error getting gRPC request", e);
-        }
-
+        log.info("Initializing RabbitMQ AMQP connection");
         RabbitMQClassic.getInstance().init();
-        RabbitMQStream.getInstance().init();
+        log.info("RabbitMQ AMQP connection initialized");
 
+        log.info("Initializing RabbitMQ Stream connection");
+        RabbitMQStream.getInstance().init();
+        log.info("RabbitMQ Stream connection initialized");
     }
 
 }

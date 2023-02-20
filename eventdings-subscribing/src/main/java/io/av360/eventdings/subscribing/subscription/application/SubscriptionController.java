@@ -12,12 +12,9 @@ import java.util.UUID;
 
 @RestController
 public class SubscriptionController {
-    private final SubscriptionService subscriptionService;
 
     @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService) {
-        this.subscriptionService = subscriptionService;
-    }
+    private SubscriptionService subscriptionService;
 
     @GetMapping("/grpc")
     public ResponseEntity getGrpc() {

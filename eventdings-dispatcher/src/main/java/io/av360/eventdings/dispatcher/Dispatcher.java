@@ -13,6 +13,7 @@ public class Dispatcher {
 
     public static void dispatch(String cloudevent) {
         List<SubscriptionDTO> foundSubscriptions = null;
+
         try {
             foundSubscriptions = SubscriptionManager.getInstance().findSubscriptions(cloudevent);
         } catch (JsonProcessingException e) {

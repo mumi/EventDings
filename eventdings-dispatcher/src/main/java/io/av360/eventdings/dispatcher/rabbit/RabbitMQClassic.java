@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public class RabbitMQClassic {
     private static final Logger log = LoggerFactory.getLogger(RabbitMQClassic.class);
@@ -26,7 +27,7 @@ public class RabbitMQClassic {
         return instance;
     }
 
-    public void init() {
+    public void init() throws IOException, TimeoutException {
         log.debug("RabbitMQClassic.init");
         Config cfg = Config.getInstance();
 
@@ -40,11 +41,12 @@ public class RabbitMQClassic {
             connection = connectionFactory.newConnection();
             channel = connection.createChannel();
         } catch (Exception e) {
-            log.error("Error creating connection", e);
+            log.error("Error connecting to RabbitMQ");
+            throw e;
         }
     }
 
-    public void publish(String queue, String message){
+    public boolean publish(String queue, String message){
         try {
             channel.queueDeclare(queue, true, false, false, null);
         } catch (IOException e) {
@@ -55,11 +57,9 @@ public class RabbitMQClassic {
             channel.basicPublish("", queue, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
         } catch (Exception e) {
             log.error("Error publishing message", e);
+            return false;
         }
-    }
 
-    public void close() throws Exception {
-        log.debug("RabbitMQClassic.close");
+        return true;
     }
-
 }

@@ -1,9 +1,6 @@
 package io.av360.eventdings.reception;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-
-public record Config(String host, String stream, String user, String password, String virtualHost, int port) {
+public record Config(String host, String stream, String user, String password, String virtualHost, int port, int serverPort) {
 
     private static Config instance;
 
@@ -15,6 +12,7 @@ public record Config(String host, String stream, String user, String password, S
             String password = System.getenv("RABBITMQ_PASSWORD");
             String virtualHost = System.getenv("RABBITMQ_VHOST");
             String port = System.getenv("RABBITMQ_STREAM_PORT");
+            String serverPort = System.getenv("SERVER_PORT");
 
             if (host == null || host.isEmpty()) {
                 throw new IllegalArgumentException("RABBITMQ_HOST is not set");
@@ -40,7 +38,11 @@ public record Config(String host, String stream, String user, String password, S
                 port = "5552";
             }
 
-            instance = new Config(host, stream, user, password, virtualHost, Integer.parseInt(port));
+            if (serverPort == null || serverPort.isEmpty()) {
+                serverPort = "80";
+            }
+
+            instance = new Config(host, stream, user, password, virtualHost, Integer.parseInt(port), Integer.parseInt(serverPort));
         }
         return instance;
     }

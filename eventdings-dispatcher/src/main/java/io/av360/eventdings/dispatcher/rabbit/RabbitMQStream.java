@@ -3,6 +3,7 @@ package io.av360.eventdings.dispatcher.rabbit;
 import com.rabbitmq.stream.*;
 import io.av360.eventdings.dispatcher.Config;
 import io.av360.eventdings.dispatcher.Dispatcher;
+import io.av360.eventdings.dispatcher.SubscriptionManager;
 import io.av360.eventdings.lib.CloudEventValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,10 +43,19 @@ public class RabbitMQStream {
                 .stream(Config.getInstance().stream())
                 .offset(OffsetSpecification.first())
                 .messageHandler((offset, message) -> {
-                    //TODO: This is a hack to remove the "Data{" and "}" from the message
                     String msg = message.getBody().toString();
+
+                    //TODO: This is a hack to remove the "Data{" and "}" from the message
                     if (msg.startsWith("Data{")) {
                         msg = msg.substring(5, msg.length() - 1);
+                    }
+
+                    while (!SubscriptionManager.getInstance().hasSubscriptions()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     if (CloudEventValidator.isValidCloudEvent(msg)) {
@@ -54,10 +64,5 @@ public class RabbitMQStream {
                 })
                 .build();
 
-    }
-
-    public void close() throws Exception {
-        this.consumer.close();
-        this.environment.close();
     }
 }

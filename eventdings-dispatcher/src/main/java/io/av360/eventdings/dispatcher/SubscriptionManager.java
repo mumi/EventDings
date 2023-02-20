@@ -28,6 +28,10 @@ public final class SubscriptionManager {
     }
 
     public SubscriptionId addSubscription(Subscription subscription) {
+        if (subscriptionDTOs.stream().anyMatch(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscription.getId())))) {
+            deleteSubscription(SubscriptionId.newBuilder().setId(subscription.getId()).build());
+        }
+
         subscriptionDTOs.add(
                 new SubscriptionDTO(
                         UUID.fromString(subscription.getId()),
@@ -44,6 +48,10 @@ public final class SubscriptionManager {
         subscriptionDTOs.removeIf(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscriptionId.getId())));
 
         return subscriptionId;
+    }
+
+    public void deleteAllSubscriptions() {
+        subscriptionDTOs.clear();
     }
 
     public List<SubscriptionDTO> findSubscriptions(String cloudevent) throws JsonProcessingException {
@@ -70,5 +78,9 @@ public final class SubscriptionManager {
         }
 
         return matchingSubscriptions;
+    }
+
+    public boolean hasSubscriptions() {
+        return !subscriptionDTOs.isEmpty();
     }
 }

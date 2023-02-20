@@ -19,6 +19,8 @@ public class GrpcServerService extends SubscriptionServiceGrpc.SubscriptionServi
 
     @Override
     public StreamObserver<Subscription> newSubscriptions(StreamObserver<SubscriptionId> responseObserver) {
+        //TODO: Delete all subscriptions before adding new ones (Refreshing). Maybe this should be a new (refreshSubscriptions) method?
+        SubscriptionManager.getInstance().deleteAllSubscriptions();
         return new StreamObserver<Subscription>() {
 
             List<SubscriptionId> replyList = new ArrayList<SubscriptionId>();

@@ -1,9 +1,9 @@
 # Event Reception
 
-Provides an addressable POST endpoint expecting cloudevents and forwards them to an RabbitMQ Stream.
+Provides an addressable POST endpoint `/webhook` expecting cloudevents and forwards them to an RabbitMQ Stream.
 
 ## Environment variables
-
+* `SERVER_PORT`: (default: `80`) Port of the Webserver
 * `RABBITMQ_HOST`: (required)
 * `RABBITMQ_STREAM`: (required) Name of the Stream Queue to forward to
 * `RABBITMQ_USER`: (required)

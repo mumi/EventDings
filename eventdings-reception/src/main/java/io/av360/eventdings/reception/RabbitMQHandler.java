@@ -6,13 +6,6 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
 public class RabbitMQHandler {
 
     private static RabbitMQHandler instance;
