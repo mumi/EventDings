@@ -39,7 +39,7 @@ public record Config(String host, String stream, String user, String password, S
             }
 
             if (serverPort == null || serverPort.isEmpty()) {
-                serverPort = "80";
+                serverPort = "8090";
             }
 
             instance = new Config(host, stream, user, password, virtualHost, Integer.parseInt(port), Integer.parseInt(serverPort));

@@ -48,6 +48,7 @@ public class RabbitMQHandler {
         this.producer = this.environment.producerBuilder().stream(Config.getInstance().stream()).build();
     }
 
+
     public Mono<Boolean> publish(String message) {
         return Mono.create(sink -> {
             MessageBuilder messageBuilder = this.producer.messageBuilder();
@@ -61,6 +62,8 @@ public class RabbitMQHandler {
                     sink.error(new IOException("Failed to publish message to stream with message"+status.getCode()));
                 }
             };
+
+            this.producer.send(messageBuilder.build(), callback);
         });
     }
 

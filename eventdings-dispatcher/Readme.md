@@ -14,3 +14,8 @@ Provides an addressable GRPC endpoint for the subscribing module to update the s
 * `RABBITMQ_VHOST`: (default: `/`)
 * `RABBITMQ_STREAM_PORT`: (default: `5552`)
 * `RABBITMQ_AMQP_PORT`: (default: `5672`)
+
+## Build image
+```bash
+./mvnw spring-boot:build-image
+```
