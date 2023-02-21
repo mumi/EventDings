@@ -1,7 +1,6 @@
 package io.av360.eventdings.dispatcher.rabbit;
 
 import com.rabbitmq.client.*;
-import com.rabbitmq.client.AMQP.BasicProperties;
 import io.av360.eventdings.dispatcher.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class RabbitMQClassic {
     }
 
     public void init() throws IOException, TimeoutException {
-        log.debug("RabbitMQClassic.init");
+        log.info("Initializing RabbitMQ AMQP connection");
         Config cfg = Config.getInstance();
 
         connectionFactory.setHost(cfg.host());
@@ -39,14 +38,23 @@ public class RabbitMQClassic {
 
         try {
             connection = connectionFactory.newConnection();
-            channel = connection.createChannel();
-        } catch (Exception e) {
+            log.info("RabbitMQ AMQP connection initialized");
+        } catch (IOException | TimeoutException e) {
             log.error("Error connecting to RabbitMQ");
             throw e;
         }
     }
 
     public boolean publish(String queue, String message){
+        if (!channel.isOpen()) {
+            log.info("Channel is not open. Creating new channel");
+            try {
+                channel = connection.createChannel();
+            } catch (IOException e) {
+                log.error("Error creating channel", e);
+            }
+        }
+
         try {
             channel.queueDeclare(queue, true, false, false, null);
         } catch (IOException e) {
@@ -61,5 +69,45 @@ public class RabbitMQClassic {
         }
 
         return true;
+    }
+
+    public void createQueue(String queue) {
+        if (!channel.isOpen()) {
+            log.info("Channel is not open. Creating new channel");
+            try {
+                channel = connection.createChannel();
+            } catch (IOException e) {
+                log.error("Error creating channel", e);
+            }
+        }
+
+        try {
+            channel.queueDeclare(queue, true, false, false, null);
+        } catch (Exception e) {
+            log.error("Error creating queue", e);
+        }
+
+        try {
+            channel.close();
+        } catch (IOException | TimeoutException e) {
+            log.error("Error closing channel", e);
+        }
+    }
+
+    public void deleteQueue(String queue) {
+        if (!channel.isOpen()) {
+            log.info("Channel is not open. Creating new channel");
+            try {
+                channel = connection.createChannel();
+            } catch (IOException e) {
+                log.error("Error creating channel", e);
+            }
+        }
+
+        try {
+            channel.queueDelete(queue);
+        } catch (Exception e) {
+            log.error("Error deleting queue", e);
+        }
     }
 }

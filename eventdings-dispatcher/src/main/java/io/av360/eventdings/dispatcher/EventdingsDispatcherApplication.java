@@ -23,13 +23,7 @@ public class EventdingsDispatcherApplication {
         Timer timer = new Timer();
         timer.schedule(new RefreshGrpcSubscriptionsTask(), 0, 5 * 60 * 1000);
 
-        log.info("Initializing RabbitMQ AMQP connection");
         RabbitMQClassic.getInstance().init();
-        log.info("RabbitMQ AMQP connection initialized");
-
-        log.info("Initializing RabbitMQ Stream connection");
         RabbitMQStream.getInstance().init();
-        log.info("RabbitMQ Stream connection initialized");
     }
-
 }

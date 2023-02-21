@@ -31,11 +31,12 @@ public class SubscriptionManager {
             removeSubscription(subscriptionId);
         }
 
-        if (consumerManager.addConsumer(subscriptionId)) {
-            subscriptions.put(subscriptionId, subscriberUrl);
-        } else {
-            log.error("Error adding subscription " + subscriptionId);
+        if (consumerManager.createConsumer(subscriptionId) == null) {
+            log.error("Error creating consumer for subscription " + subscriptionId);
+            return;
         }
+
+        subscriptions.put(subscriptionId, subscriberUrl);
     }
 
     public String getSubscriberUrl(UUID subscriptionId) {

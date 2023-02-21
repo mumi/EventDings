@@ -3,6 +3,7 @@ package io.av360.eventdings.lib;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +13,8 @@ public class CloudEventValidator {
 
     public static boolean isValidCloudEvent(String eventString) {
         try {
+            eventString = StringEscapeUtils.escapeJson(eventString);
             JsonNode eventNode = OBJECT_MAPPER.readTree(eventString);
-
             JsonNode specversionNode = eventNode.get("specversion");
             if (specversionNode == null || !specversionNode.asText().equals("1.0")) {
                 return false;

@@ -29,6 +29,7 @@ public class RabbitMQStream {
     }
 
     public void init() {
+        log.info("Initializing RabbitMQ Stream connection");
         Config cfg = Config.getInstance();
 
         environment = Environment.builder()
@@ -64,5 +65,6 @@ public class RabbitMQStream {
                 })
                 .build();
 
+        log.info("RabbitMQ Stream connection initialized");
     }
 }

@@ -1,11 +1,13 @@
 package io.av360.eventdings.dispatcher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.av360.eventdings.dispatcher.rabbit.RabbitMQClassic;
 import io.av360.eventdings.lib.grpc.Subscription;
 import io.av360.eventdings.lib.grpc.SubscriptionId;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.av360.eventdings.lib.dtos.SubscriptionDTO;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.*;
 
@@ -29,7 +31,7 @@ public final class SubscriptionManager {
 
     public SubscriptionId addSubscription(Subscription subscription) {
         if (subscriptionDTOs.stream().anyMatch(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscription.getId())))) {
-            deleteSubscription(SubscriptionId.newBuilder().setId(subscription.getId()).build());
+            deleteSubscription(SubscriptionId.newBuilder().setId(subscription.getId()).build(), false);
         }
 
         subscriptionDTOs.add(
@@ -41,22 +43,34 @@ public final class SubscriptionManager {
                 )
         );
 
+        RabbitMQClassic.getInstance().createQueue("sub_" + subscription.getId());
+
         return SubscriptionId.newBuilder().setId(subscription.getId()).build();
     }
 
-    public SubscriptionId deleteSubscription(SubscriptionId subscriptionId) {
+    public SubscriptionId deleteSubscription(SubscriptionId subscriptionId, boolean deleteQueue) {
         subscriptionDTOs.removeIf(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscriptionId.getId())));
+
+        if (deleteQueue) {
+            RabbitMQClassic.getInstance().deleteQueue(subscriptionId.getId());
+        }
 
         return subscriptionId;
     }
 
-    public void deleteAllSubscriptions() {
+    public void deleteAllSubscriptions(boolean deleteQueues) {
+        if (deleteQueues) {
+            for (SubscriptionDTO subscriptionDTO : subscriptionDTOs) {
+                RabbitMQClassic.getInstance().deleteQueue(subscriptionDTO.getId().toString());
+            }
+        }
+
         subscriptionDTOs.clear();
     }
 
     public List<SubscriptionDTO> findSubscriptions(String cloudevent) throws JsonProcessingException {
         List<SubscriptionDTO> matchingSubscriptions = new ArrayList<SubscriptionDTO>();
-
+        cloudevent = StringEscapeUtils.escapeJson(cloudevent);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(cloudevent);
 

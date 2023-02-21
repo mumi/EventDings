@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 public class ConsumerManager {
 
@@ -14,8 +15,7 @@ public class ConsumerManager {
     private static ConsumerManager instance = null;
     private ConnectionFactory connectionFactory = new ConnectionFactory();
     private Connection connection;
-    private Channel channel;
-    private HashMap<UUID, Consumer> consumers = new HashMap<>();
+    private HashMap<UUID, DefaultConsumer> consumers = new HashMap<>();
     private ConsumerManager() {
         Config cfg = Config.getInstance();
 
@@ -28,7 +28,6 @@ public class ConsumerManager {
         log.info("Initializing RabbitMQ connection");
         try {
             connection = connectionFactory.newConnection();
-            channel = connection.createChannel();
             log.info("RabbitMQ connection initialized");
         } catch (Exception e) {
             log.error("Error creating connection", e);
@@ -42,17 +41,29 @@ public class ConsumerManager {
         return instance;
     }
 
-    private Consumer createConsumer(UUID subscriptionId) {
-        Consumer consumer = new DefaultConsumer(channel) {
+    private DefaultConsumer _createConsumer(UUID subscriptionId) {
+        Channel channel;
+
+        try {
+            channel = connection.createChannel();
+            log.debug("Created channel " + channel.getChannelNumber());
+        } catch (IOException e) {
+            log.error("Error creating channel", e);
+            return null;
+        }
+
+        DefaultConsumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");
                 log.debug("Received '" + message + "'");
 
-                if (Delivery.deliver(subscriptionId, message)) {
+                Boolean deliverySuccessful = Delivery.deliver(subscriptionId, message);
+
+                if (Boolean.TRUE.equals(deliverySuccessful)) {
                     log.debug("Acking message " + envelope.getDeliveryTag());
                     channel.basicAck(envelope.getDeliveryTag(), false);
-                } else {
+                } else if (Boolean.FALSE.equals(deliverySuccessful)) {
                     log.debug("Nacking message " + envelope.getDeliveryTag());
                     channel.basicNack(envelope.getDeliveryTag(), false, true);
 
@@ -60,6 +71,16 @@ public class ConsumerManager {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
+                    }
+
+                } else {
+                    log.info("Cancelling consumer " + consumerTag + " and closing channel " + channel.getChannelNumber());
+
+                    try {
+                        channel.basicCancel(consumerTag);
+                        channel.close();
+                    } catch (TimeoutException e) {
+                        log.debug("Error closing channel", e);
                     }
                 }
             }
@@ -75,27 +96,32 @@ public class ConsumerManager {
         return consumer;
     }
 
-    public boolean addConsumer(UUID subscriptionId) {
+    public DefaultConsumer createConsumer(UUID subscriptionId) {
         if (consumers.containsKey(subscriptionId)) {
             log.info("Consumer already exists. Readding anyway.");
             removeConsumer(subscriptionId);
         }
 
-        Consumer consumer = createConsumer(subscriptionId);
+        DefaultConsumer consumer = _createConsumer(subscriptionId);
 
         if (consumer == null) {
-            return false;
+            return null;
         }
 
         consumers.put(subscriptionId, consumer);
-        return true;
+        return consumer;
     }
 
     public void removeConsumer(UUID subscriptionId) {
+        String consumerTag = consumers.get(subscriptionId).getConsumerTag();
+        Channel channel = consumers.get(subscriptionId).getChannel();
+
+        log.info("Subscription deleted. Cancelling consumer " + consumerTag + " and closing channel " + channel.getChannelNumber());
         try {
-            channel.basicCancel( "sub_" + subscriptionId);
-        } catch (IOException e) {
-            log.error("Error cancelling consumer. Removing anyway.", e);
+            channel.basicCancel(consumerTag);
+            channel.close();
+        } catch (IOException | TimeoutException e) {
+            log.debug("Error cancelling consumer / closing channel", e);
         }
 
         consumers.remove(subscriptionId);

@@ -24,9 +24,19 @@ public class Dispatcher {
 
         assert foundSubscriptions != null;
         for (SubscriptionDTO subscription : foundSubscriptions) {
-            rabbitMQClassic.publish("sub_" + subscription.getId(), cloudevent);
+            boolean success;
+
+            do {
+                success = rabbitMQClassic.publish("sub_" + subscription.getId(), cloudevent);
+                if (!success) {
+                    log.error("Error publishing CloudEvent to subscription " + subscription.getId());
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } while (!success);
         }
-
     }
-
 }
