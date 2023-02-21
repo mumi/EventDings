@@ -7,7 +7,6 @@ import io.av360.eventdings.lib.grpc.SubscriptionId;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.av360.eventdings.lib.dtos.SubscriptionDTO;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.*;
 
@@ -52,7 +51,7 @@ public final class SubscriptionManager {
         subscriptionDTOs.removeIf(subscriptionDTO -> subscriptionDTO.getId().equals(UUID.fromString(subscriptionId.getId())));
 
         if (deleteQueue) {
-            RabbitMQClassic.getInstance().deleteQueue(subscriptionId.getId());
+            RabbitMQClassic.getInstance().deleteQueue("sub_" + subscriptionId.getId());
         }
 
         return subscriptionId;
@@ -61,7 +60,7 @@ public final class SubscriptionManager {
     public void deleteAllSubscriptions(boolean deleteQueues) {
         if (deleteQueues) {
             for (SubscriptionDTO subscriptionDTO : subscriptionDTOs) {
-                RabbitMQClassic.getInstance().deleteQueue(subscriptionDTO.getId().toString());
+                RabbitMQClassic.getInstance().deleteQueue("sub_" + subscriptionDTO.getId().toString());
             }
         }
 
@@ -70,7 +69,6 @@ public final class SubscriptionManager {
 
     public List<SubscriptionDTO> findSubscriptions(String cloudevent) throws JsonProcessingException {
         List<SubscriptionDTO> matchingSubscriptions = new ArrayList<SubscriptionDTO>();
-        cloudevent = StringEscapeUtils.escapeJson(cloudevent);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(cloudevent);
 

@@ -23,7 +23,6 @@ public class RabbitMQStream {
     public static RabbitMQStream getInstance() {
         if (instance == null) {
             instance = new RabbitMQStream();
-            instance.init();
         }
         return instance;
     }

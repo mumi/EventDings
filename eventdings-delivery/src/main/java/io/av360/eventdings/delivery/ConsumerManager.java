@@ -46,7 +46,7 @@ public class ConsumerManager {
 
         try {
             channel = connection.createChannel();
-            log.debug("Created channel " + channel.getChannelNumber());
+            log.info("Created channel " + channel.getChannelNumber());
         } catch (IOException e) {
             log.error("Error creating channel", e);
             return null;
@@ -89,7 +89,7 @@ public class ConsumerManager {
         try {
             channel.basicConsume("sub_" + subscriptionId, false, consumer);
         } catch (IOException e) {
-            log.error("Error creating consumer", e);
+            log.error("Error creating consumer for subscription", e);
             return null;
         }
 

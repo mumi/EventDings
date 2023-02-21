@@ -27,6 +27,10 @@ public class RefreshSubscriptionsTask extends TimerTask {
                 .thenApply(HttpResponse::body)
                 .thenApply(SubscriptionsResponse::fromJSON)
                 .thenAccept(SubscriptionManager.getInstance()::refreshSubscriptions)
+                .exceptionally(e -> {
+                    log.error("Error refreshing subscriptions", e);
+                    return null;
+                })
                 .join();
     }
 }

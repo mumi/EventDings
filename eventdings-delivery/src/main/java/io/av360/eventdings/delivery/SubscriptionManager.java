@@ -32,7 +32,6 @@ public class SubscriptionManager {
         }
 
         if (consumerManager.createConsumer(subscriptionId) == null) {
-            log.error("Error creating consumer for subscription " + subscriptionId);
             return;
         }
 

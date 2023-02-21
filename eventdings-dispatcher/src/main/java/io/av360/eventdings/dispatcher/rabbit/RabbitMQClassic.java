@@ -38,6 +38,7 @@ public class RabbitMQClassic {
 
         try {
             connection = connectionFactory.newConnection();
+            channel = connection.createChannel();
             log.info("RabbitMQ AMQP connection initialized");
         } catch (IOException | TimeoutException e) {
             log.error("Error connecting to RabbitMQ");
