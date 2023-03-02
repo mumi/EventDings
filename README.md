@@ -1,8 +1,19 @@
-# EventDings
+# Maverick.EventDispatcher
 
-EventDings is a simple event routing system. It is designed to be used in a microservice architecture, where each service is responsible for a single task. EventDings allows you to route events from one service to another, and to define a set of rules that determine which events are routed to which services.
+The Event Dispatcher is a simple event routing system. It is designed to be used in a microservice architecture, where each service is responsible for a single task. The dispatcher allows you to route events from one service to another, and to define a set of rules that determine which events are routed to which services.
+
+This a stop-gap solution for developers planning to implement software on top of a event-driven architecture targeting the K8S stack (using KNative Eventing) or the Cloud (using something like the Azure Event Grid). Setting up KNative can be tricky and is often (at least in our case) rejected by customers with a vanilla Kubernetes setup. Public clouds are regularly forbidden by internal regulation. 
+
+
+### Features
+The event dispatcher consists of multiple side cars augmenting a RabbitMQ instance and its Streams module. All its features are exposed as adressable HTTP endpoints to simplify the integration. 
 
 
 ### Architecture
 
-EventDings consists of four components: A receptionist, a subscribing API, a dispatcher and a delivery service. The receptionist is a webhook that receives events and forwards them into a RabbitMQ stream. The subscribing API is a REST API that allows you to subscribe to events (with filters). The dispatcher is a service that listens to the RabbitMQ stream and forwards events to their queue(s) (One queue per subscription). The delivery service listens to the RabbitMQ queues and delivers events to the destination of the subscriptions.
+The Event Dispatcher consists of four components: 
+
+* an adressable receiver, which accepts any kind of CloudEvent through its webhook and forwards them to the event stream managed by RabbitMQ
+* the internal broker, which routes the events to the different queues as configured in the subscriptions
+* the distributor, which monitors the queues and delivers the events to the addressable destinations configured in the subscriptions
+* a subscription service, which provides an API for external systems to create and manage their subscriptions
