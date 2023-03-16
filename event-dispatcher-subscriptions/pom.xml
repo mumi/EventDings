@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.av360</groupId>
-	<artifactId>eventdings-subscribing</artifactId>
+	<artifactId>event-dispatcher-subscriptions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>eventdings-subscribing</name>
 	<description>Demo project for Spring Boot</description>
@@ -86,7 +86,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.av360</groupId>
-			<artifactId>eventdings-lib</artifactId>
+			<artifactId>event-dispatcher-shared</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
