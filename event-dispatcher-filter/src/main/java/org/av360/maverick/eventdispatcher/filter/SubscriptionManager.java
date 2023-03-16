@@ -5,7 +5,7 @@ import org.av360.maverick.eventdispatcher.filter.rabbit.RabbitMQClassic;
 import org.av360.maverick.eventdispatcher.shared.grpc.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.shared.dto.SubscriptionDTO;
 
 import java.util.*;
 

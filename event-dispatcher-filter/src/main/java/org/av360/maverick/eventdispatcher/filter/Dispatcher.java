@@ -2,7 +2,7 @@ package org.av360.maverick.eventdispatcher.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.av360.maverick.eventdispatcher.filter.rabbit.RabbitMQClassic;
-import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.shared.dto.SubscriptionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

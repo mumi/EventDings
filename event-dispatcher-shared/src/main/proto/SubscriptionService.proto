@@ -9,7 +9,7 @@ service SubscriptionService {
   rpc NewSubscription (Subscription) returns (SubscriptionId) {
   }
 
-  rpc NewSubscriptions (stream Subscription) returns (stream SubscriptionId) {
+  rpc SyncSubscriptions (stream Subscription) returns (stream SubscriptionId) {
   }
 
   rpc DeleteSubscription (SubscriptionId) returns (SubscriptionId) {
@@ -20,11 +20,11 @@ service SubscriptionService {
 }
 
 message SubscriptionId {
-  string id = 1;
+  int64 id = 1;
 }
 
 message Subscription {
-  string id = 1;
+  int64 id = 1;
   google.protobuf.Timestamp createdAt = 2;
   string subscriberUri = 3;
   map<string, string> filters = 4;

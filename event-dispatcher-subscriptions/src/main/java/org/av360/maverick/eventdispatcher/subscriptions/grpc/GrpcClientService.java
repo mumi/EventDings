@@ -1,14 +1,16 @@
 package org.av360.maverick.eventdispatcher.subscriptions.grpc;
 
-import com.google.protobuf.Timestamp;
+import com.google.common.util.concurrent.ListenableFuture;
+import org.av360.maverick.eventdispatcher.shared.GuavaAdapter;
 import org.av360.maverick.eventdispatcher.shared.grpc.*;
-import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,13 @@ public class GrpcClientService {
     private SubscriptionServiceGrpc.SubscriptionServiceBlockingStub subscriptionServiceBlockingStub;
 
     @GrpcClient("eventdings-dispatcher")
+    private SubscriptionServiceGrpc.SubscriptionServiceFutureStub subscriptionServiceFutureStub;
+
+    @GrpcClient("eventdings-dispatcher")
     private SubscriptionServiceGrpc.SubscriptionServiceStub subscriptionServiceStub;
 
 
+    /*
     private Subscription subscriptionDTOToGrpcSubscription(SubscriptionDTO subscriptionDTO) {
         Subscription.Builder subBuilder = Subscription.newBuilder();
         subBuilder.setId(subscriptionDTO.getId().toString());
@@ -32,58 +38,42 @@ public class GrpcClientService {
         subBuilder.setSubscriberUri(subscriptionDTO.getSubscriberUri());
         subBuilder.putAllFilters(subscriptionDTO.getFilters());
         return subBuilder.build();
+    }*/
+
+
+    public Mono<SubscriptionId> sendSubscription(Subscription subscription) {
+        ListenableFuture<SubscriptionId> future = this.subscriptionServiceFutureStub.newSubscription(subscription);
+        return new GuavaAdapter<SubscriptionId>().asMono(future);
     }
 
-
-    public void sendSubscription(SubscriptionDTO subscriptionDTO) {
-        Subscription subscription = subscriptionDTOToGrpcSubscription(subscriptionDTO);
-
-        try {
-            this.subscriptionServiceBlockingStub.newSubscription(subscription);
-        } catch (final StatusRuntimeException e) {
-            log.error("RPC failed: " + e.getStatus());
-        }
-    }
-
-    public List<SubscriptionId> sendSubscriptions(List<SubscriptionDTO> subscriptionDTOs) {
-        List<SubscriptionId> subscriptionIds = new ArrayList<SubscriptionId>();
-        try {
+    public Flux<Long> sendSubscriptions(Flux<Subscription> publisher) {
+        return Flux.create(sink -> {
             StreamObserver<SubscriptionId> responseObserver = new StreamObserver<SubscriptionId>() {
                 @Override
                 public void onNext(SubscriptionId subscriptionId) {
-                    subscriptionIds.add(subscriptionId);
+                    sink.next(subscriptionId.getId());
                 }
-
                 @Override
                 public void onError(Throwable throwable) {
-                    log.error("RPC failed: " + throwable.getMessage());
+                   sink.error(throwable);
                 }
 
                 @Override
                 public void onCompleted() {
+                    sink.complete();
                 }
             };
-
-            StreamObserver<Subscription> requestObserver = this.subscriptionServiceStub.newSubscriptions(responseObserver);
-            for (SubscriptionDTO subscriptionDTO : subscriptionDTOs) {
-                requestObserver.onNext(subscriptionDTOToGrpcSubscription(subscriptionDTO));
-            }
-            requestObserver.onCompleted();
-        } catch (final StatusRuntimeException e) {
-            log.error("RPC failed: " + e.getStatus());
-        }
-        return subscriptionIds;
+            StreamObserver<Subscription> requestObserver = this.subscriptionServiceStub.syncSubscriptions(responseObserver);
+            publisher.doOnNext(requestObserver::onNext).doOnComplete(requestObserver::onCompleted).subscribe();
+        });
     }
 
-    public void deleteSubscription(UUID id) {
-        try {
-            this.subscriptionServiceBlockingStub.deleteSubscription(SubscriptionId.newBuilder().setId(String.valueOf(id)).build());
-        } catch (final StatusRuntimeException e) {
-            log.error("RPC failed: " + e.getStatus());
-        }
+    public Mono<Void> deleteSubscription(Long id) {
+        ListenableFuture<SubscriptionId> future = this.subscriptionServiceFutureStub.deleteSubscription(SubscriptionId.newBuilder().setId(id.intValue()).build());
+        return new GuavaAdapter<SubscriptionId>().asMono(future).then(Mono.empty());
     }
 
-    public List<SubscriptionId> deleteSubscriptions(List<UUID> ids) {
+    public List<SubscriptionId> deleteSubscriptions(List<Long> ids) {
         List<SubscriptionId> subscriptionIds = new ArrayList<SubscriptionId>();
         try {
             StreamObserver<SubscriptionId> responseObserver = new StreamObserver<SubscriptionId>() {
@@ -103,8 +93,8 @@ public class GrpcClientService {
             };
 
             StreamObserver<SubscriptionId> requestObserver = this.subscriptionServiceStub.deleteSubscriptions(responseObserver);
-            for (UUID id : ids) {
-                requestObserver.onNext(SubscriptionId.newBuilder().setId(String.valueOf(id)).build());
+            for (Long id : ids) {
+                requestObserver.onNext(SubscriptionId.newBuilder().setId(id).build());
             }
             requestObserver.onCompleted();
         } catch (final StatusRuntimeException e) {
@@ -113,4 +103,7 @@ public class GrpcClientService {
 
         return subscriptionIds;
     }
+
+
+
 }
