@@ -1,4 +1,4 @@
-package io.av360.eventdings.lib.dtos;
+package org.av360.maverick.eventdispatcher.shared.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

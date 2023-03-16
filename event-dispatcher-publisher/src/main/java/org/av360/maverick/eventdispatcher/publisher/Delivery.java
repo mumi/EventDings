@@ -1,4 +1,4 @@
-package io.av360.eventdings.delivery;
+package org.av360.maverick.eventdispatcher.publisher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
-package io.av360.eventdings.delivery;
+package org.av360.maverick.eventdispatcher.publisher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.av360.eventdings.lib.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

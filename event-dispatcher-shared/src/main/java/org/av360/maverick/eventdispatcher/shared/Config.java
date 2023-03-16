@@ -1,4 +1,4 @@
-package io.av360.eventdings.lib;
+package org.av360.maverick.eventdispatcher.shared;
 
 public class Config {
 }

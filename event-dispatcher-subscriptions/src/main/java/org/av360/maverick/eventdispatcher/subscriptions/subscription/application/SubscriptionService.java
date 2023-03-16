@@ -1,9 +1,9 @@
-package io.av360.eventdings.subscribing.subscription.application;
+package org.av360.maverick.eventdispatcher.subscriptions.subscription.application;
 
-import io.av360.eventdings.lib.dtos.SubscriptionDTO;
-import io.av360.eventdings.subscribing.grpc.GrpcClientService;
-import io.av360.eventdings.subscribing.subscription.domain.Subscription;
-import io.av360.eventdings.subscribing.subscription.domain.SubscriptionRepository;
+import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.subscriptions.grpc.GrpcClientService;
+import org.av360.maverick.eventdispatcher.subscriptions.subscription.domain.Subscription;
+import org.av360.maverick.eventdispatcher.subscriptions.subscription.domain.SubscriptionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

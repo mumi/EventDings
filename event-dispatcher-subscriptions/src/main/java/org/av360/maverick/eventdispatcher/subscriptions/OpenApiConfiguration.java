@@ -1,4 +1,4 @@
-package io.av360.eventdings.subscribing;
+package org.av360.maverick.eventdispatcher.subscriptions;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 

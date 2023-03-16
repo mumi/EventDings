@@ -1,5 +1,4 @@
-package io.av360.eventdings.subscribing.subscription.domain;
-
+package org.av360.maverick.eventdispatcher.subscriptions.subscription.domain;
 
 
 import jakarta.persistence.*;

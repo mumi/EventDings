@@ -1,4 +1,4 @@
-package io.av360.eventdings.delivery;
+package org.av360.maverick.eventdispatcher.publisher;
 
 public record Config(String host, String user, String password, String virtualHost, int amqpPort , String subscribingUrl) {
 

@@ -1,4 +1,4 @@
-package io.av360.eventdings.subscribing.grpc;
+package org.av360.maverick.eventdispatcher.subscriptions.grpc;
 
 import net.devh.boot.grpc.client.interceptor.GrpcGlobalClientInterceptor;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package io.av360.eventdings.subscribing.subscription.application;
+package org.av360.maverick.eventdispatcher.subscriptions.subscription.application;
 
-import io.av360.eventdings.lib.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

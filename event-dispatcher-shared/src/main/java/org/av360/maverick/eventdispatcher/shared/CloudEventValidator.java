@@ -1,4 +1,4 @@
-package io.av360.eventdings.lib;
+package org.av360.maverick.eventdispatcher.shared;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

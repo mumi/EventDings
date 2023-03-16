@@ -2,20 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>io.av360</groupId>
+
+    <parent>
+        <groupId>org.av360.maverick</groupId>
+        <artifactId>event-dispatcher-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
 	<artifactId>event-dispatcher-subscriptions</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>eventdings-subscribing</name>
-	<description>Demo project for Spring Boot</description>
-	<properties>
-		<java.version>19</java.version>
-	</properties>
+    <name>Maverick.EventDispatcher - Subscriptions</name>
+    <description>Service responsible for subscription management</description>    	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,12 +53,10 @@
 		<dependency>
 			<groupId>org.modelmapper.extensions</groupId>
 			<artifactId>modelmapper-spring</artifactId>
-			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -82,19 +77,11 @@
 		<dependency>
 			<groupId>net.devh</groupId>
 			<artifactId>grpc-client-spring-boot-starter</artifactId>
-			<version>2.15.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>io.av360</groupId>
-			<artifactId>event-dispatcher-shared</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-simple</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>org.av360.maverick</groupId>
+            <artifactId>event-dispatcher-shared</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

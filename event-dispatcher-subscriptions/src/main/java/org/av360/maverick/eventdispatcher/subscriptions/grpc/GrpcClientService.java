@@ -1,8 +1,8 @@
-package io.av360.eventdings.subscribing.grpc;
+package org.av360.maverick.eventdispatcher.subscriptions.grpc;
 
 import com.google.protobuf.Timestamp;
-import io.av360.eventdings.lib.grpc.*;
-import io.av360.eventdings.lib.dtos.SubscriptionDTO;
+import org.av360.maverick.eventdispatcher.shared.grpc.*;
+import org.av360.maverick.eventdispatcher.shared.dtos.SubscriptionDTO;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.client.inject.GrpcClient;

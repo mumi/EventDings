@@ -4,26 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.av360</groupId>
-    <artifactId>event-dispatcher-publisher</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
+    <parent>
+        <groupId>org.av360.maverick</groupId>
+        <artifactId>event-dispatcher-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>event-dispatcher-publisher</artifactId>
+    <name>Maverick.EventDispatcher - Publisher</name>
+    <description>Service responsible for delivery of events to subscribers</description>    
 
     <dependencies>
         <dependency>
-            <groupId>io.av360</groupId>
-            <artifactId>eventdings-lib</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.av360.maverick</groupId>
+            <artifactId>event-dispatcher-shared</artifactId>
         </dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>5.16.0</version>
         </dependency>
     </dependencies>
 
@@ -38,7 +38,7 @@
                         <image>eclipse-temurin:19-jre</image>
                     </from>
                     <to>
-                        <image>eventdings-delivery</image>
+                        <image>EventDispatcher-delivery</image>
                     </to>
                 </configuration>
             </plugin>
