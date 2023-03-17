@@ -1,7 +1,10 @@
 package org.av360.maverick.eventdispatcher.subscriptions.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.Timestamps;
 import org.av360.maverick.eventdispatcher.shared.GuavaAdapter;
+import org.av360.maverick.eventdispatcher.shared.domain.Subscription;
 import org.av360.maverick.eventdispatcher.shared.grpc.*;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
@@ -12,37 +15,35 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 @Service
 public class GrpcClientService {
     Logger log = LoggerFactory.getLogger(GrpcClientService.class);
-    @GrpcClient("eventdings-dispatcher")
+    @GrpcClient("event-dispatcher")
     private SubscriptionServiceGrpc.SubscriptionServiceBlockingStub subscriptionServiceBlockingStub;
 
-    @GrpcClient("eventdings-dispatcher")
+    @GrpcClient("event-dispatcher")
     private SubscriptionServiceGrpc.SubscriptionServiceFutureStub subscriptionServiceFutureStub;
 
-    @GrpcClient("eventdings-dispatcher")
+    @GrpcClient("event-dispatcher")
     private SubscriptionServiceGrpc.SubscriptionServiceStub subscriptionServiceStub;
 
-
-    /*
-    private Subscription subscriptionDTOToGrpcSubscription(SubscriptionDTO subscriptionDTO) {
-        Subscription.Builder subBuilder = Subscription.newBuilder();
-        subBuilder.setId(subscriptionDTO.getId().toString());
-        subBuilder.setCreatedAt(Timestamp.newBuilder().setSeconds(subscriptionDTO.getCreatedAt().getTime() / 1000).build());
-        subBuilder.setSubscriberUri(subscriptionDTO.getSubscriberUri());
-        subBuilder.putAllFilters(subscriptionDTO.getFilters());
-        return subBuilder.build();
-    }*/
+    private SubscriptionMessage map(Subscription subscription) {
+        return SubscriptionMessage.newBuilder()
+                .setId(subscription.getId())
+                .setCreatedAt(Timestamps.fromMillis(subscription.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli()))
+                .setSubscriberUri(subscription.getSubscriberUri())
+                .putAllFilters(subscription.getFilters())
+                .build();
+    }
 
 
     public Mono<SubscriptionId> sendSubscription(Subscription subscription) {
-        ListenableFuture<SubscriptionId> future = this.subscriptionServiceFutureStub.newSubscription(subscription);
+        ListenableFuture<SubscriptionId> future = this.subscriptionServiceFutureStub.newSubscription(map(subscription));
         return new GuavaAdapter<SubscriptionId>().asMono(future);
     }
 
@@ -63,8 +64,8 @@ public class GrpcClientService {
                     sink.complete();
                 }
             };
-            StreamObserver<Subscription> requestObserver = this.subscriptionServiceStub.syncSubscriptions(responseObserver);
-            publisher.doOnNext(requestObserver::onNext).doOnComplete(requestObserver::onCompleted).subscribe();
+            StreamObserver<SubscriptionMessage> requestObserver = this.subscriptionServiceStub.syncSubscriptions(responseObserver);
+            publisher.map(this::map).doOnNext(requestObserver::onNext).doOnComplete(requestObserver::onCompleted).subscribe();
         });
     }
 

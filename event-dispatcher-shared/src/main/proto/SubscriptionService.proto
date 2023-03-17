@@ -6,10 +6,10 @@ option java_package = "org.av360.maverick.eventdispatcher.shared.grpc";
 option java_outer_classname = "SubscribingProto";
 
 service SubscriptionService {
-  rpc NewSubscription (Subscription) returns (SubscriptionId) {
+  rpc NewSubscription (SubscriptionMessage) returns (SubscriptionId) {
   }
 
-  rpc SyncSubscriptions (stream Subscription) returns (stream SubscriptionId) {
+  rpc SyncSubscriptions (stream SubscriptionMessage) returns (stream SubscriptionId) {
   }
 
   rpc DeleteSubscription (SubscriptionId) returns (SubscriptionId) {
@@ -23,7 +23,7 @@ message SubscriptionId {
   int64 id = 1;
 }
 
-message Subscription {
+message SubscriptionMessage {
   int64 id = 1;
   google.protobuf.Timestamp createdAt = 2;
   string subscriberUri = 3;

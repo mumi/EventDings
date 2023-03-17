@@ -13,12 +13,13 @@ public class ConsumerManager {
 
     private static final Logger log = LoggerFactory.getLogger(ConsumerManager.class);
     private static ConsumerManager instance = null;
-    private ConnectionFactory connectionFactory = new ConnectionFactory();
+    private final ConnectionFactory connectionFactory;
     private Connection connection;
-    private HashMap<UUID, DefaultConsumer> consumers = new HashMap<>();
+    private HashMap<Long, DefaultConsumer> consumers = new HashMap<>();
     private ConsumerManager() {
         Config cfg = Config.getInstance();
 
+        connectionFactory = new ConnectionFactory();
         connectionFactory.setHost(cfg.host());
         connectionFactory.setPort(cfg.amqpPort());
         connectionFactory.setUsername(cfg.user());
@@ -41,7 +42,7 @@ public class ConsumerManager {
         return instance;
     }
 
-    private DefaultConsumer _createConsumer(UUID subscriptionId) {
+    private DefaultConsumer _createConsumer(Long subscriptionId) {
         Channel channel;
 
         try {
@@ -96,9 +97,9 @@ public class ConsumerManager {
         return consumer;
     }
 
-    public DefaultConsumer createConsumer(UUID subscriptionId) {
+    public DefaultConsumer createConsumer(Long subscriptionId) {
         if (consumers.containsKey(subscriptionId)) {
-            log.info("Consumer already exists. Readding anyway.");
+            log.info("Consumer already exists. Reading anyway.");
             removeConsumer(subscriptionId);
         }
 
@@ -112,7 +113,7 @@ public class ConsumerManager {
         return consumer;
     }
 
-    public void removeConsumer(UUID subscriptionId) {
+    public void removeConsumer(Long subscriptionId) {
         String consumerTag = consumers.get(subscriptionId).getConsumerTag();
         Channel channel = consumers.get(subscriptionId).getChannel();
 

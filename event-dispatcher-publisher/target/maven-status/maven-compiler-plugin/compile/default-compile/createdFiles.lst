@@ -1,8 +1,0 @@
-org\av360\maverick\eventdispatcher\publisher\Delivery.class
-org\av360\maverick\eventdispatcher\publisher\SubscriptionManager.class
-org\av360\maverick\eventdispatcher\publisher\SubscriptionsResponse.class
-org\av360\maverick\eventdispatcher\publisher\RefreshSubscriptionsTask.class
-org\av360\maverick\eventdispatcher\publisher\ConsumerManager.class
-org\av360\maverick\eventdispatcher\publisher\EventdingsDeliveryApplication.class
-org\av360\maverick\eventdispatcher\publisher\Config.class
-org\av360\maverick\eventdispatcher\publisher\ConsumerManager$1.class

@@ -25,40 +25,22 @@ public class SubscriptionService {
     private GrpcClientService grpcClientService;
 
     public Object getGrpc() {
-
         grpcClientService.sendSubscriptions(getAllSubscriptions());
         return null;
     }
 
     public Mono<Subscription> createSubscription(SubscriptionDTO.Request requestedSubscription) {
-        return Mono.create(sink -> {
-            Subscription sub = new Subscription(
-                    requestedSubscription.addressable(),
-                    requestedSubscription.filters()
-            );
 
-            subRepo.save(sub);
-        }).then()
-
-
-
-        grpcClientService.sendSubscription(returnDTO);
-
-        return returnDTO;
+        Subscription sub = new Subscription(
+                requestedSubscription.addressable(),
+                requestedSubscription.filters()
+        );
+        return subRepo.save(sub)
+                .doOnSuccess(savedSubscription -> this.grpcClientService.sendSubscription(savedSubscription).subscribe());
     }
 
     public Flux<Subscription> getAllSubscriptions() {
         return subRepo.findAll();
-
-        /*
-        ArrayList<Subscription> subscriptions = (ArrayList<Subscription>) subRepo.findAll();
-        ModelMapper modelMapper = new ModelMapper();
-        ArrayList<SubscriptionDTO> returnDTOs = new ArrayList<>();
-        for (Subscription subscription : subscriptions) {
-            SubscriptionDTO returnDTO = modelMapper.map(subscription, SubscriptionDTO.class);
-            returnDTOs.add(returnDTO);
-        }
-        return returnDTOs;*/
     }
 
     public Mono<Subscription> getSubscription(Long id) {
@@ -66,7 +48,8 @@ public class SubscriptionService {
     }
 
     public Mono<Void> deleteSubscription(Long id) {
-        return subRepo.deleteById(id).then(grpcClientService.deleteSubscription(id))
+        return subRepo.deleteById(id)
+                .doOnSuccess(onSuccess -> this.grpcClientService.deleteSubscription(id).subscribe());
     }
 
 

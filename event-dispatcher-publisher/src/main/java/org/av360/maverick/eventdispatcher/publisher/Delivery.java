@@ -14,7 +14,7 @@ public class Delivery {
     private static final Logger log = LoggerFactory.getLogger(Delivery.class);
 
     static HttpClient client = HttpClient.newHttpClient();
-    public static Boolean deliver(UUID subscriptionId, String cloudevent) {
+    public static Boolean deliver(Long subscriptionId, String cloudevent) {
         String url = SubscriptionManager.getInstance().getSubscriberUrl(subscriptionId);
 
         if (url == null) {

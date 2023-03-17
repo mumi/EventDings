@@ -77,7 +77,13 @@
             <groupId>org.av360.maverick</groupId>
             <artifactId>event-dispatcher-shared</artifactId>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>3.21.7</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
