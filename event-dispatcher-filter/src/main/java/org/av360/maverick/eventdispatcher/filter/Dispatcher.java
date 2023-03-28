@@ -2,6 +2,7 @@ package org.av360.maverick.eventdispatcher.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.av360.maverick.eventdispatcher.filter.rabbit.RabbitMQClassic;
+import org.av360.maverick.eventdispatcher.shared.domain.Subscription;
 import org.av360.maverick.eventdispatcher.shared.dto.SubscriptionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,7 @@ public class Dispatcher {
     private static final Logger log = LoggerFactory.getLogger(Dispatcher.class);
 
     public static void dispatch(String cloudevent) {
-        List<SubscriptionDTO> foundSubscriptions = null;
+        List<Subscription> foundSubscriptions = null;
 
         try {
             foundSubscriptions = SubscriptionManager.getInstance().findSubscriptions(cloudevent);
@@ -23,7 +24,7 @@ public class Dispatcher {
         RabbitMQClassic rabbitMQClassic = RabbitMQClassic.getInstance();
 
         assert foundSubscriptions != null;
-        for (SubscriptionDTO subscription : foundSubscriptions) {
+        for (Subscription subscription : foundSubscriptions) {
             boolean success;
 
             do {

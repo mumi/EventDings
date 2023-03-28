@@ -1,7 +1,6 @@
 package org.av360.maverick.eventdispatcher.subscriptions.grpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
 import org.av360.maverick.eventdispatcher.shared.GuavaAdapter;
 import org.av360.maverick.eventdispatcher.shared.domain.Subscription;
