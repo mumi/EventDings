@@ -26,6 +26,13 @@
         <modelmapper.version>3.1.1</modelmapper.version>
         <grpc.version>1.53.0</grpc.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>my-repo1</id>
+            <url>https://mumi.github.io/maven2/</url>
+        </repository>
+    </repositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -44,16 +51,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-        <dependency>
-            <groupId>net.devh</groupId>
-            <artifactId>grpc-server-spring-boot-starter</artifactId>
-            <version>${spring.grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.devh</groupId>
-            <artifactId>grpc-client-spring-boot-starter</artifactId>
-            <version>${spring.grpc.version}</version>
-        </dependency>                    
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-server-spring-boot-starter</artifactId>
+                <version>${spring.grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.devh</groupId>
+                <artifactId>grpc-client-spring-boot-starter</artifactId>
+                <version>${spring.grpc.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.av360.maverick</groupId>
                 <artifactId>event-dispatcher-shared</artifactId>
@@ -116,8 +123,13 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.24</version>
             </dependency>
-        </dependencies>
 
+            <dependency>
+                <groupId>io.projectreactor.rabbitmq</groupId>
+                <artifactId>reactor-rabbitmq</artifactId>
+                <version>1.5.6</version>
+            </dependency>
+        </dependencies>
 
     </dependencyManagement>
     <dependencies>

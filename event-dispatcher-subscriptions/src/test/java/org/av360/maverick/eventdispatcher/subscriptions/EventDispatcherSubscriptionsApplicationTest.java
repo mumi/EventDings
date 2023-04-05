@@ -9,7 +9,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ApplicationTest {
+class EventDispatcherSubscriptionsApplicationTest {
 /*
 Rules:
 - no one can access API

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-class EventdingsReceptionApplicationTest {
+class EventDispatcherReceiverApplicationTest {
     @Test
     public void some_architecture_rule() {
         assert true;
