@@ -18,8 +18,8 @@
 
     <properties>
         <revision>0.1.1</revision>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.0.4</spring.version>
         <spring.grpc.version>2.15.0-SNAPSHOT</spring.grpc.version>
