@@ -5,16 +5,17 @@ package org.av360.maverick.eventdispatcher.shared.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.signature.qual.Identifier;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Subscription {
 
+    @Identifier
     private Long id;
     private LocalDateTime createdAt;
     private String subscriberUri;
