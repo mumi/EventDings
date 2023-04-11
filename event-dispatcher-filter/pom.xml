@@ -12,7 +12,7 @@
     <name>Maverick.EventDispatcher - Filter</name>
     <description>Service responsible for forwarding events to correct consumer queues</description>    	
     <properties>
-        <java.version>19</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
