@@ -34,5 +34,6 @@ steps:
     inputs:
       mavenPomFile: 'event-dispatcher-filter/pom.xml'
       goals: 'spring-boot:build-image'
+      options: '-Dmaven.repo.local=$(Agent.BuildDirectory)/.m2/repository'
       publishJUnitResults: true
       jdkVersionOption: 1.17
