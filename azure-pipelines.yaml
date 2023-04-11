@@ -4,7 +4,7 @@ trigger:
   - main
 
 pool:
-  vmImage: eclipse-temurin:19
+  vmImage: ubuntu-latest
 
 steps:
   - task: Maven@3
@@ -15,7 +15,7 @@ steps:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: 19
+      jdkVersionOption: 1.17
       jdkArchitectureOption: x64
       mavenVersionOption: 'Default'
       mavenAuthenticateFeed: false
@@ -35,4 +35,4 @@ steps:
       mavenPomFile: 'event-dispatcher-filter/pom.xml'
       goals: 'spring-boot:build-image'
       publishJUnitResults: true
-      jdkVersionOption: 19
+      jdkVersionOption: 1.17
