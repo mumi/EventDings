@@ -42,6 +42,10 @@
             <groupId>org.av360.maverick</groupId>
             <artifactId>event-dispatcher-shared</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor.rabbitmq</groupId>
+            <artifactId>reactor-rabbitmq</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

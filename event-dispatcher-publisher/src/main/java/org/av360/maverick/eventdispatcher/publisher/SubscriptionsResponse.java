@@ -24,18 +24,11 @@ public class SubscriptionsResponse {
             List<ObjectNode> jsonNodes = objectMapper.readValue(s, objectMapper.getTypeFactory().constructCollectionType(List.class, ObjectNode.class));
 
             for (ObjectNode jsonNode : jsonNodes) {
-                String addressable = jsonNode.get("addressable").asText();
-//                Map<String, String> filters = new HashMap<>();
-//
-//                if (jsonNode.has("filters")) {
-//                    ObjectNode filtersNode = (ObjectNode) jsonNode.get("filters");
-//                    filtersNode.fields().forEachRemaining(entry -> filters.put(entry.getKey(), entry.getValue().asText()));
-//                }
-
+                // filters not needed here
                 Subscription subscription = new Subscription();
-                subscription.setSubscriberUri(addressable);
+                subscription.setAddressable(jsonNode.get("addressable").asText());
                 subscription.setId(jsonNode.get("identifier").asLong());
-                subscription.setCreatedAt(LocalDateTime.parse(jsonNode.get("creationDate").asText(), DateTimeFormatter.ISO_DATE_TIME));
+                subscription.setCreationDate(LocalDateTime.parse(jsonNode.get("creationDate").asText(), DateTimeFormatter.ISO_DATE_TIME));
 
                 subscriptions.add(subscription);
             }

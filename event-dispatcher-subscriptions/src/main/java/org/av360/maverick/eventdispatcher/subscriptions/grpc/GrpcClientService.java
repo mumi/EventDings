@@ -32,8 +32,8 @@ public class GrpcClientService {
     private SubscriptionMessage map(Subscription subscription) {
         return SubscriptionMessage.newBuilder()
                 .setId(subscription.getId())
-                .setCreatedAt(Timestamps.fromMillis(subscription.getCreatedAt().toInstant(ZoneOffset.UTC).toEpochMilli()))
-                .setSubscriberUri(subscription.getSubscriberUri())
+                .setCreatedAt(Timestamps.fromMillis(subscription.getCreationDate().toInstant(ZoneOffset.UTC).toEpochMilli()))
+                .setSubscriberUri(subscription.getAddressable())
                 .putAllFilters(subscription.getFilters())
                 .build();
     }
