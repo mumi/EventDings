@@ -10,7 +10,7 @@
 
     <artifactId>event-dispatcher-filter</artifactId>
     <name>Maverick.EventDispatcher - Filter</name>
-    <description>Service responsible for forwarding events to correct consumer queues</description>    	
+    <description>Service responsible for forwarding events to correct consumer queues</description>
     <properties>
         <java.version>17</java.version>
     </properties>
