@@ -1,4 +1,13 @@
 # Don't forget to set the following variables for your (release) pipeline: ghcr.user, ghcr.password
+parameters:
+  - name: imageRegistryUrl # currently its not possible to get the url from ServiceConnections
+    type: string
+  - name: publicRegistry
+    type: string
+    default: public
+  - name: privateRegistry
+    type: string
+    default: private
 
 trigger:
   - main
@@ -6,7 +15,22 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: A365/PipelineTemplates
+
 steps:
+  # Registry login
+  - task: Docker@2
+    displayName: 'Login to Container Registry'
+    inputs:
+      ${{ if eq(variables['Build.SourceBranchName'], parameters.publicBranch) }}:
+        containerRegistry: '${{parameters.publicRegistry}}'
+      ${{ if ne(variables['Build.SourceBranchName'], parameters.publicBranch) }}:
+        containerRegistry: '${{parameters.privateRegistry}}'
+      command: 'login'
   - task: Maven@3
     displayName: Test and Package
     inputs:
@@ -25,10 +49,10 @@ steps:
   - task: Maven@3
     displayName: Build and publish Filter Docker Image to Github Container Registry
     env:
-      IMAGE_PREFIX: ghcr.io/bechtleav360
+      IMAGE_PREFIX: $(parameters.imageRegistryUrl)/maverick
       IMAGE_NAME: maverick-event-dispatcher-filter
       IMAGE_VERSION: release
-      DOCKER_HOST: https://ghcr.io
+      DOCKER_HOST: $(parameters.imageRegistryUrl)
       DOCKER_USER: $(docker.credentials.user)
       DOCKER_PASSWORD: $(docker.credentials.password)
     inputs:
