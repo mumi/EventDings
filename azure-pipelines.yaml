@@ -1,8 +1,10 @@
-# Don't forget to set the following variables for your (release) pipeline: ghcr.user, ghcr.password
-
+variables:
+  - name: imageRegistryUrl
+    value: registry.harbor.av360.org
 
 trigger:
   - main
+  - develop
 
 pool:
   vmImage: ubuntu-latest
@@ -12,9 +14,6 @@ resources:
     - repository: templates
       type: git
       name: A365/PipelineTemplates
-
-variables:
-  - template: build-project-container.yaml@templates
 
 steps:
   - task: Maven@3
@@ -31,7 +30,7 @@ steps:
       mavenAuthenticateFeed: false
       effectivePomSkip: false
       sonarQubeRunAnalysis: false
-  - script: echo "Publishing image with $(Build.BuildNumber) for user $(ghcr.user)"
+  - script: echo "Publishing image with $(Build.BuildNumber)"
   - task: Maven@3
     displayName: Build and publish Filter Docker Image to Github Container Registry
     env:
