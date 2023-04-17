@@ -14,7 +14,7 @@ resources:
       name: A365/PipelineTemplates
 
 variables:
-- template: build-project-container.yaml@templates
+  - template: build-project-container.yaml@templates
 
 steps:
   - task: Maven@3
