@@ -2,6 +2,8 @@
 parameters:
   - name: imageRegistryUrl # currently its not possible to get the url from ServiceConnections
     type: string
+  - name: publicBranch
+    type: string
   - name: publicRegistry
     type: string
     default: public
