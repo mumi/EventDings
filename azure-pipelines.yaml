@@ -1,7 +1,3 @@
-variables:
-  - name: imageRegistryUrl
-    value: registry.harbor.av360.org
-
 trigger:
   - main
   - develop
