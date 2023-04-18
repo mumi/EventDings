@@ -1,7 +1,10 @@
 parameters:
-  - name: imageRegistry
+  - name: imageRegistryUrl
     type: string
-    default: $(privateRegistry)
+  - name: imageRegistryUsername
+    type: string
+  - name: imageRegistryPassword
+    type: string
 
 trigger:
   - main
@@ -17,7 +20,6 @@ resources:
       name: A365/PipelineTemplates
 
 steps:
-  - script: echo "AAA ${{ parameters.imageRegistry }}"
   - task: Maven@3
     displayName: Test and Package
     inputs:
@@ -40,8 +42,8 @@ steps:
       IMAGE_NAME: maverick-event-dispatcher-filter
       IMAGE_VERSION: release
       DOCKER_HOST: $(imageRegistryUrl)
-      DOCKER_USER: $(docker.credentials.user)
-      DOCKER_PASSWORD: $(docker.credentials.password)
+      DOCKER_USER: $(imageRegistryUsername)
+      DOCKER_PASSWORD: $(imageRegistryPassword)
     inputs:
       mavenPomFile: 'event-dispatcher-filter/pom.xml'
       goals: 'spring-boot:build-image'
