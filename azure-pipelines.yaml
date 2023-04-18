@@ -1,3 +1,8 @@
+parameters:
+  - name: imageRegistry
+    type: string
+    default: $(privateRegistry)
+
 trigger:
   - main
   - develop
@@ -12,7 +17,7 @@ resources:
       name: A365/PipelineTemplates
 
 steps:
-  - script: echo "$(privateRegistry)"
+  - script: echo "AAA ${{ parameters.imageRegistry }}"
   - task: Maven@3
     displayName: Test and Package
     inputs:
