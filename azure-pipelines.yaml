@@ -1,11 +1,3 @@
-parameters:
-  - name: imageRegistryUrl
-    type: string
-  - name: imageRegistryUsername
-    type: string
-  - name: imageRegistryPassword
-    type: string
-
 trigger:
   - main
   - develop
