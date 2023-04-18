@@ -12,6 +12,7 @@ resources:
       name: A365/PipelineTemplates
 
 steps:
+  - script: echo "$(privateRegistry)"
   - task: Maven@3
     displayName: Test and Package
     inputs:
