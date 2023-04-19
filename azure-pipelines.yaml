@@ -1,6 +1,7 @@
 trigger:
   - main
   - develop
+  - feature/*
 
 pool: 'A365VSTS'
 
