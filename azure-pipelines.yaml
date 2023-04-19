@@ -2,8 +2,7 @@ trigger:
   - main
   - develop
 
-pool:
-  name: A365VSTS
+pool: 'A365VSTS'
 
 steps:
   - task: Maven@3
