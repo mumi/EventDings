@@ -3,7 +3,7 @@ trigger:
   - develop
 
 pool:
-  name: A365-Development
+  name: Docker
 
 steps:
   - task: Maven@3
