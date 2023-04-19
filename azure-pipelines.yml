@@ -1,19 +1,43 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- develop
+  - main
+  - develop
+  - feature/*
 
-pool:
-  vmImage: ubuntu-latest
+pool: 'A365VSTS'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - task: Maven@3
+    displayName: Test and Package
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'install'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: 1.17
+      jdkArchitectureOption: x64
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+  - script: echo "Publishing image with $(Build.BuildNumber)"
+  - task: Maven@3
+    displayName: Build and publish Filter Docker Image to Container Registry
+    #    env:
+    #      IMAGE_PREFIX: $(imageRegistryUrl)/maverick
+    #      IMAGE_NAME: maverick-event-dispatcher-filter
+    #      IMAGE_VERSION: release
+    #      DOCKER_HOST: $(imageRegistryUrl)
+    #      DOCKER_USER: $(docker.credentials.user)
+    #      DOCKER_PASSWORD: $(docker.credentials.password)
+    inputs:
+      mavenPomFile: 'event-dispatcher-filter/pom.xml'
+      goals: 'spring-boot:build-image'
+      publishJUnitResults: true
+      jdkVersionOption: 1.17
+      options: >
+        -DskipTests=false 
+        -Ddocker.publish=true
+        -Ddocker.credentials.user=$(imageRegistryUsername)
+        -Ddocker.credentials.password=$(imageRegistryPassword)
+        -Ddocker.registry.host=$(imageRegistryUrl)
